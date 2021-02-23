@@ -1,40 +1,22 @@
-// const http = require('http').createServer();
-
-// const io = require('socket.io')(http, {
-//     cors: {origin : "*"}
-// });
-
-// io.on('connection', (socket) => {
-//     console.log('a user connected');
-
-//     socket.on('message', (message) => {
-//         console.log(message);
-//         io.emit('message', `${socket.id.substr(0,2)} said ${message}`);
-//     });
-// });
-
-// http.listen(8080, () => console.log('listening on http://localhost:8080'));
-
-const express = require("express");
-const app = express();
-
-const http = require("http");
-const server = http.Server(app);
-
-const socketIO = require("socket.io");
-
-const io = socketIO(server);
-
+const app = require('express')();
+const httpServer = require('http').createServer(app);
+const io = require('socket.io')(httpServer, {
+  cors: {origin : '*'}
+});
 
 const port = process.env.PORT || 3000;
 
-io.on("connection", (socket) => {
-  console.log("a user connected");
+io.on('connection', (socket) => {
+  console.log('a user connected');
 
-  socket.on("message", (message) => {
+  socket.on('message', (message) => {
     console.log(message);
-    io.emit("message", `${socket.id.substr(0, 2)} said ${message}`);
+    io.emit('message', `${socket.id.substr(0, 2)} said ${message}`);
+  });
+
+  socket.on('disconnect', function() {
+    console.log('a user disconnected!');
   });
 });
 
-server.listen(port, () => console.log(`listening on port ${port}`));
+httpServer.listen(port, () => console.log(`listening on port ${port}`));
