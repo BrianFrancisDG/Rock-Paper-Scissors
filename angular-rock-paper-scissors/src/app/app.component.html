@@ -8,3 +8,8 @@
 
 <input [(ngModel)]="newMessage" (keyup)="$event.keyCode == 13 && sendMessage()" />
 <button (click)="sendMessage()">Send Message</button>
+
+<app-main-game-space></app-main-game-space>
+<app-choices></app-choices>
+<app-emoji></app-emoji>
+<app-play-button></app-play-button>

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-// import { Socket } from 'ngx-socket-io';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { io } from "socket.io-client";
 
 
@@ -22,7 +21,7 @@ export class ChatService {
     this.socket.on('message', (message) =>{
       this.message$.next(message);
     });
-    
+
     return this.message$.asObservable();
   };
 }
