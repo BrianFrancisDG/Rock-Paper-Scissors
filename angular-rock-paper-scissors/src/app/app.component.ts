@@ -18,7 +18,7 @@ export class AppComponent {
   }
 
   ngOnInit(){
-    this.chatService.getMessages().subscribe((message: string) => {
+    this.chatService.getNewMessage().subscribe((message: string) => {
       this.messageList.push(message);
     })
   }
