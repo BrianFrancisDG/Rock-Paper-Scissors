@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MainGameSpaceComponent } from './main-game-space.component';
+import { MessageListComponent } from './message-list.component';
 
-describe('MainGameSpaceComponent', () => {
-  let component: MainGameSpaceComponent;
-  let fixture: ComponentFixture<MainGameSpaceComponent>;
+describe('MessageListComponent', () => {
+  let component: MessageListComponent;
+  let fixture: ComponentFixture<MessageListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MainGameSpaceComponent ]
+      declarations: [ MessageListComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MainGameSpaceComponent);
+    fixture = TestBed.createComponent(MessageListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

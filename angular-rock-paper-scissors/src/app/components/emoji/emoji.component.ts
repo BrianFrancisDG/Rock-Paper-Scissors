@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SelectedMoveService } from 'src/app/services/selected-move.service';
 
 @Component({
   selector: 'app-emoji',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EmojiComponent implements OnInit {
 
-  constructor() { }
+  currentMove = '';
+
+  constructor(private selectedMoveService : SelectedMoveService) { }
 
   ngOnInit(): void {
+    this.selectedMoveService.getSelectedMove().subscribe(data => {     
+      this.currentMove = data;
+    });
   }
-
 }

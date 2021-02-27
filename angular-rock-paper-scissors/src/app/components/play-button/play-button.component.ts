@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { SelectedMoveService } from 'src/app/services/selected-move.service';
+import { SocketService } from 'src/app/services/socket.service';
 
 @Component({
   selector: 'app-play-button',
@@ -7,9 +9,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PlayButtonComponent implements OnInit {
 
-  constructor() { }
+  currentMove = '';
+
+  constructor(
+    private selectedMoveService : SelectedMoveService,
+    private socketService: SocketService
+    ) { }
 
   ngOnInit(): void {
+    this.selectedMoveService.getSelectedMove().subscribe(data => {     
+      this.currentMove = data;
+    });
+  }
+
+  playMove(){
+    this.socketService.sendMovePlayed(this.currentMove);
+    console.log("move played!");
   }
 
 }

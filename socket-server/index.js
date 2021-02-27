@@ -14,6 +14,11 @@ io.on('connection', (socket) => {
     io.emit('message', `${socket.id.substr(0, 2)} said ${message}`);
   });
 
+  socket.on('movePlayed', (movePlayed) => {
+    console.log(movePlayed);
+    io.emit('movePlayed', `${socket.id.substr(0, 2)} played ${movePlayed}`);
+  });
+
   socket.on('disconnect', function() {
     console.log('a user disconnected!');
   });

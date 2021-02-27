@@ -1,15 +1,7 @@
 <router-outlet></router-outlet>
-
-<div *ngFor="let message of messageList">
-    <li>
-        {{message}}
-    </li>  
-</div>
-
-<input [(ngModel)]="newMessage" (keyup)="$event.keyCode == 13 && sendMessage()" />
-<button (click)="sendMessage()">Send Message</button>
-
-<app-main-game-space></app-main-game-space>
-<app-choices></app-choices>
+ 
+<app-message-list></app-message-list>
 <app-emoji></app-emoji>
+<app-choices></app-choices>
 <app-play-button></app-play-button>
+

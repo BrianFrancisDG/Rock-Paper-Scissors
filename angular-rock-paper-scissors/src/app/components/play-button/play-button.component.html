@@ -1,1 +1,6 @@
-<p>play-button works!</p>
+<div *ngIf = "currentMove == ''">
+    <button [disabled]="true">Choose a move</button>
+</div>
+<div *ngIf = "currentMove !== ''">
+    <button (click) = "playMove()">Play {{ currentMove }}</button>
+</div>

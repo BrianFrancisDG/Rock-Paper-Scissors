@@ -4,18 +4,19 @@ import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { MainGameSpaceComponent } from './components/main-game-space/main-game-space.component';
 import { PlayButtonComponent } from './components/play-button/play-button.component';
 import { EmojiComponent } from './components/emoji/emoji.component';
 import { ChoicesComponent } from './components/choices/choices.component';
+import { MessageListComponent } from './components/message-list/message-list.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    MainGameSpaceComponent,
     PlayButtonComponent,
     EmojiComponent,
-    ChoicesComponent
+    ChoicesComponent,
+    MessageListComponent
   ],
   imports: [
     BrowserModule,

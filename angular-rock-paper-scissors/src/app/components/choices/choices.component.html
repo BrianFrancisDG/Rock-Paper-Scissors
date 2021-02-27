@@ -1,1 +1,18 @@
-<p>choices works!</p>
+
+<fieldset style="border: none;" [disabled] = false>
+    <div>
+        <input type="radio" id="rock" name="drone" value="rock" (change)="toggleChecked($event)">
+        <label for="rock">Rock</label>
+    </div>
+
+    <div>
+        <input type="radio" id="paper" name="drone" value="paper" (change)="toggleChecked($event)">
+        <label for="paper">Paper</label>
+    </div>
+    
+    <div>
+        <input type="radio" id="scissors" name="drone" value="scissors" (change)="toggleChecked($event)">
+        <label for="scissors">Scissors</label>
+    </div>
+
+</fieldset>
