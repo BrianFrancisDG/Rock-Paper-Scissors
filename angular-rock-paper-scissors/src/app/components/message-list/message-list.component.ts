@@ -17,10 +17,27 @@ export class MessageListComponent implements OnInit {
 
   ngOnInit(){
     this.socketService.getNewMessage().subscribe((message: string) => {
-      this.messageList.push(message);
+      if(message){
+        this.messageList.push(message);
+      } 
     });
+
     this.socketService.getMovePlayed().subscribe((movePlayed: string) => {
-      this.messageList.push(movePlayed);
+      if(movePlayed){
+        this.messageList.push(movePlayed);
+      }    
+    });
+
+    this.socketService.getConnectedUser().subscribe((connectedUser: string) => {
+      if(connectedUser){
+        this.messageList.push(connectedUser);
+      }    
+    });
+
+    this.socketService.getDisconnectedUser().subscribe((disconnectedUser: string) => {
+      if(disconnectedUser){
+        this.messageList.push(disconnectedUser);
+      }    
     });
   }
 

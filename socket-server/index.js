@@ -7,20 +7,24 @@ const io = require('socket.io')(httpServer, {
 const port = process.env.PORT || 3000;
 
 io.on('connection', (socket) => {
+  let user = socket.id.substr(0, 2);
   console.log('a user connected');
+
+  io.emit('connectedUser', `${user} connected!`);
 
   socket.on('message', (message) => {
     console.log(message);
-    io.emit('message', `${socket.id.substr(0, 2)} said ${message}`);
+    io.emit('message', `${user} said ${message}`);
   });
 
   socket.on('movePlayed', (movePlayed) => {
     console.log(movePlayed);
-    io.emit('movePlayed', `${socket.id.substr(0, 2)} played ${movePlayed}`);
+    io.emit('movePlayed', `${user} played ${movePlayed}`);
   });
 
   socket.on('disconnect', function() {
     console.log('a user disconnected!');
+    io.emit('disconnectedUser', `${user} disconnected!`);
   });
 });
 

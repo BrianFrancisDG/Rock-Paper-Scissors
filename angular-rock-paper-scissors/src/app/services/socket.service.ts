@@ -10,6 +10,8 @@ export class SocketService {
 
   public message$: BehaviorSubject<string> = new BehaviorSubject(null);
   public movePlayed$: BehaviorSubject<string> = new BehaviorSubject(null);
+  public connectedUser$: BehaviorSubject<string> = new BehaviorSubject(null);
+  public disconnectedUser$: BehaviorSubject<string> = new BehaviorSubject(null);
   constructor() {}
 
   socket = io('http://localhost:3000');
@@ -37,5 +39,22 @@ export class SocketService {
     });
 
     return this.movePlayed$.asObservable();
+  };
+
+  
+  public getConnectedUser = () => {
+    this.socket.on('connectedUser', (connectedUser) =>{
+      this.connectedUser$.next(connectedUser);
+    });
+
+    return this.connectedUser$.asObservable();
+  };
+
+  public getDisconnectedUser = () => {
+    this.socket.on('disconnectedUser', (disconnectedUser) =>{
+      this.disconnectedUser$.next(disconnectedUser);
+    });
+
+    return this.disconnectedUser$.asObservable();
   };
 }
