@@ -8,6 +8,7 @@ import { PlayButtonComponent } from './components/play-button/play-button.compon
 import { EmojiComponent } from './components/emoji/emoji.component';
 import { ChoicesComponent } from './components/choices/choices.component';
 import { MessageListComponent } from './components/message-list/message-list.component';
+import { JoinRoomComponent } from './components/join-room/join-room.component';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { MessageListComponent } from './components/message-list/message-list.com
     PlayButtonComponent,
     EmojiComponent,
     ChoicesComponent,
-    MessageListComponent
+    MessageListComponent,
+    JoinRoomComponent
   ],
   imports: [
     BrowserModule,
