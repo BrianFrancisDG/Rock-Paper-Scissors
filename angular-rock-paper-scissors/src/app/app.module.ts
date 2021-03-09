@@ -9,6 +9,7 @@ import { EmojiComponent } from './components/emoji/emoji.component';
 import { ChoicesComponent } from './components/choices/choices.component';
 import { MessageListComponent } from './components/message-list/message-list.component';
 import { JoinRoomComponent } from './components/join-room/join-room.component';
+import { GameBoardComponent } from './components/game-board/game-board.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { JoinRoomComponent } from './components/join-room/join-room.component';
     EmojiComponent,
     ChoicesComponent,
     MessageListComponent,
-    JoinRoomComponent
+    JoinRoomComponent,
+    GameBoardComponent
   ],
   imports: [
     BrowserModule,

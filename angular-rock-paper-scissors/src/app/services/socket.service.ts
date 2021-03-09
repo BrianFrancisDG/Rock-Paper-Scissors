@@ -58,7 +58,7 @@ export class SocketService {
     return this.disconnectedUser$.asObservable();
   };
 
-  public joinRoom() {
-    this.socket.emit('joinRoom', '1111');
-  }
+  // public joinRoom() {
+  //   this.socket.emit('joinRoom', '1111');
+  // }
 }

@@ -14,7 +14,7 @@ export class JoinRoomComponent implements OnInit {
   }
 
   public joinRoom(){
-    this.socketService.joinRoom();
+    // this.socketService.joinRoom();
   }
 
 }

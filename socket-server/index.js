@@ -27,15 +27,15 @@ io.on('connection', (socket) => {
     io.emit('disconnectedUser', `${user} disconnected!`);
   });
 
-  socket.on('joinRoom', (roomNumber) => {
-    // if 'to' isnt specfied, will broadcast event to WHOLE server. 
-    // TODO: Have people join a room intially then only broadcast to that room. Think like 'among us'
-    
-    socket.join(roomNumber);
-    console.log(`${user} joined room ${roomNumber}.`);
-    socket.to(roomNumber).emit('message', `Hey! I ${user} joined room ${roomNumber}.`)
+  // socket.on('joinRoom', (roomNumber) => {
+  //   // if 'to' isnt specfied, will broadcast event to WHOLE server. 
+  //   // TODO: Have people join a room intially then only broadcast to that room. Think like 'among us'
 
-  })
+  //   socket.join(roomNumber);
+  //   console.log(`${user} joined room ${roomNumber}.`);
+  //   //socket.to(roomNumber).emit('message', `Hey! I ${user} joined room ${roomNumber}.`)
+
+  // })
 });
 
 httpServer.listen(port, () => console.log(`listening on port ${port}`));
