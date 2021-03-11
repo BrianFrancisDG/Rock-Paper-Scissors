@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { io } from "socket.io-client";
+import { Player } from '../models/player.model';
 
 
 @Injectable({
@@ -12,6 +13,9 @@ export class SocketService {
   public movePlayed$: BehaviorSubject<string> = new BehaviorSubject(null);
   public connectedUser$: BehaviorSubject<string> = new BehaviorSubject(null);
   public disconnectedUser$: BehaviorSubject<string> = new BehaviorSubject(null);
+
+  public connectedPlayers = {}
+
   constructor() {}
 
   socket = io('http://localhost:3000');
@@ -43,8 +47,18 @@ export class SocketService {
 
   
   public getConnectedUser = () => {
-    this.socket.on('connectedUser', (connectedUser) =>{
+    this.socket.on('connectedUser', (connectedUser, socketId) =>{
       this.connectedUser$.next(connectedUser);
+
+      const connectedPlayer: Player = {
+        socketId: socketId,
+        currentRoom: socketId
+      }
+
+      this.connectedPlayers[socketId] = connectedPlayer;
+
+      console.log(this.connectedPlayers);
+
     });
 
     return this.connectedUser$.asObservable();
@@ -53,6 +67,7 @@ export class SocketService {
   public getDisconnectedUser = () => {
     this.socket.on('disconnectedUser', (disconnectedUser) =>{
       this.disconnectedUser$.next(disconnectedUser);
+      
     });
 
     return this.disconnectedUser$.asObservable();

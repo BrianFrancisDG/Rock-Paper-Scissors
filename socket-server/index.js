@@ -10,7 +10,7 @@ io.on('connection', (socket) => {
   let user = socket.id.substr(0, 2);
   console.log('a user connected');
 
-  io.emit('connectedUser', `${user} connected!`);
+  io.emit('connectedUser', `${user} connected!`, socket.id);
 
   socket.on('message', (message) => {
     console.log(message);
@@ -25,6 +25,7 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('a user disconnected!');
     io.emit('disconnectedUser', `${user} disconnected!`);
+    //pass disconnected socketId
   });
 
   // socket.on('joinRoom', (roomNumber) => {
