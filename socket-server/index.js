@@ -4,13 +4,26 @@ const io = require('socket.io')(httpServer, {
   cors: {origin : '*'}
 });
 
+let connectedPlayers = {};
+
 const port = process.env.PORT || 3000;
 
 io.on('connection', (socket) => {
-  let user = socket.id.substr(0, 2);
+
+  let fullSocketId = socket.id;
+  let user = fullSocketId.substr(0, 2);
   console.log('a user connected');
 
-  io.emit('connectedUser', `${user} connected!`, socket.id);
+  const connectedPlayer = {
+    socketId: fullSocketId,
+    currentRoom: fullSocketId
+  }
+
+  connectedPlayers[fullSocketId] = connectedPlayer;
+
+  console.log(connectedPlayers);
+
+  io.emit('connectedUser', `${user} connected!`, fullSocketId);
 
   socket.on('message', (message) => {
     console.log(message);
@@ -28,15 +41,18 @@ io.on('connection', (socket) => {
     //pass disconnected socketId
   });
 
-  // socket.on('joinRoom', (roomNumber) => {
-  //   // if 'to' isnt specfied, will broadcast event to WHOLE server. 
-  //   // TODO: Have people join a room intially then only broadcast to that room. Think like 'among us'
+  socket.on('joinRoom', (roomNumber) => {
+    // if 'to' isnt specfied, will broadcast event to WHOLE server. 
+    // TODO: Have people join a room intially then only broadcast to that room. Think like 'among us'
 
-  //   socket.join(roomNumber);
-  //   console.log(`${user} joined room ${roomNumber}.`);
-  //   //socket.to(roomNumber).emit('message', `Hey! I ${user} joined room ${roomNumber}.`)
+    socket.join(roomNumber);
+    console.log(`${user} joined room ${roomNumber}.`);
+    connectedPlayers[fullSocketId].currentRoom = roomNumber;
+    console.log(connectedPlayers);
 
-  // })
+    socket.to(roomNumber).emit('message', `Hey! I ${user} joined room ${roomNumber}.`)
+
+  });
 });
 
 httpServer.listen(port, () => console.log(`listening on port ${port}`));
