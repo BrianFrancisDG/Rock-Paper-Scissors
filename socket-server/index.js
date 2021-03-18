@@ -31,8 +31,9 @@ io.on('connection', (socket) => {
   });
 
   socket.on('movePlayed', (movePlayed) => {
-    console.log(movePlayed);
-    io.emit('movePlayed', `${user} played ${movePlayed}`);
+    currentPlayerRoom = connectedPlayers[fullSocketId].currentRoom;
+    console.log(`${fullSocketId} in room ${currentPlayerRoom} played ${movePlayed}`);
+    io.to(currentPlayerRoom).emit('movePlayed', `${user} played ${movePlayed}`);
   });
 
   socket.on('disconnect', () => {
@@ -42,13 +43,10 @@ io.on('connection', (socket) => {
   });
 
   socket.on('joinRoom', (roomNumber) => {
-    // if 'to' isnt specfied, will broadcast event to WHOLE server. 
-    // TODO: Have people join a room intially then only broadcast to that room. Think like 'among us'
 
     socket.join(roomNumber);
     console.log(`${user} joined room ${roomNumber}.`);
     connectedPlayers[fullSocketId].currentRoom = roomNumber;
-    console.log(connectedPlayers);
 
     socket.to(roomNumber).emit('message', `Hey! I ${user} joined room ${roomNumber}.`)
 
