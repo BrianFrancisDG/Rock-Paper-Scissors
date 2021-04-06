@@ -5,6 +5,7 @@ const io = require('socket.io')(httpServer, {
 });
 
 let connectedPlayers = {};
+let roomCounter = {};
 
 const port = process.env.PORT || 3000;
 
@@ -31,7 +32,11 @@ io.on('connection', (socket) => {
   });
 
   socket.on('movePlayed', (movePlayed) => {
-    currentPlayerRoom = connectedPlayers[fullSocketId].currentRoom;
+    let currentPlayerRoom = connectedPlayers[fullSocketId].currentRoom;
+
+    // TODO: Add a property to check if they've already played a move
+    // do game logic.
+
     console.log(`${fullSocketId} in room ${currentPlayerRoom} played ${movePlayed}`);
     io.to(currentPlayerRoom).emit('movePlayed', `${user} played ${movePlayed}`);
   });
@@ -39,18 +44,40 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('a user disconnected!');
     io.emit('disconnectedUser', `${user} disconnected!`);
-    //pass disconnected socketId
   });
 
   socket.on('joinRoom', (roomNumber) => {
 
-    socket.join(roomNumber);
-    console.log(`${user} joined room ${roomNumber}.`);
-    connectedPlayers[fullSocketId].currentRoom = roomNumber;
+    if(!(roomNumber in roomCounter)){
+      roomCounter[roomNumber] = 0;
+    }
 
-    socket.to(roomNumber).emit('message', `Hey! I ${user} joined room ${roomNumber}.`)
+    if(roomCounter[roomNumber] < 2){
+      socket.join(roomNumber);
+      console.log(`${user} joined room ${roomNumber}.`);
+      connectedPlayers[fullSocketId].currentRoom = roomNumber;
 
+      socket.to(roomNumber).emit('message', `Hey! I ${user} joined room ${roomNumber}.`);
+
+      roomCounter[roomNumber] += 1;
+
+      console.log(`roomCounter: ${roomNumber}:${roomCounter[roomNumber]}`);
+
+    }else{
+      // TODO: Debug why this message isnt sending to user.
+      socket.to(fullSocketId).emit('message', `Sorry, Room ${roomNumber} is full.`);
+      console.log("room full");
+    }
   });
+
+  // Doing room clean up before leaving room.
+  socket.on('disconnecting', () => {
+    let connectedPlayerRoom = connectedPlayers[fullSocketId].currentRoom;
+    roomCounter[connectedPlayerRoom] -= 1;
+
+    console.log(`roomCounter: ${connectedPlayerRoom}:${roomCounter[connectedPlayerRoom]}`);
+  });
+
 });
 
 httpServer.listen(port, () => console.log(`listening on port ${port}`));
