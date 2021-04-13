@@ -1,3 +1,5 @@
+import { Player } from "./models/player";
+
 const app = require('express')();
 const httpServer = require('http').createServer(app);
 const io = require('socket.io')(httpServer, {
@@ -24,7 +26,7 @@ io.on('connection', (socket) => {
   console.log('a user connected');
 
   //TODO: Add hasPlayerMovedFlag boolean
-  const connectedPlayer = {
+  const connectedPlayer: Player = {
     socketId: fullSocketId,
     currentRoom: fullSocketId
   }
