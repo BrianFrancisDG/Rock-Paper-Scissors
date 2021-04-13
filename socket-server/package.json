@@ -2,10 +2,11 @@
   "name": "socket-server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "built/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ."
+    "start": "node .",
+    "dev": "tsc && node ."
   },
   "keywords": [],
   "author": "",
@@ -13,6 +14,8 @@
   "dependencies": {
     "express": "^4.17.1",
     "socket.io": "^3.1.1",
+    "source-map-loader": "^2.0.1",
+    "ts-loader": "^8.1.0",
     "ws": "^7.4.3"
   }
 }

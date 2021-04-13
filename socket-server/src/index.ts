@@ -6,6 +6,14 @@ const io = require('socket.io')(httpServer, {
 
 let connectedPlayers = {};
 let roomCounter = {};
+/**
+ * { 1111: 
+ *  { 
+ *    playersInRoom:[p1,p2], 
+ *    playersCount: 2
+ *  }
+ * }
+ */
 
 const port = process.env.PORT || 3000;
 
@@ -15,6 +23,7 @@ io.on('connection', (socket) => {
   let user = fullSocketId.substr(0, 2);
   console.log('a user connected');
 
+  //TODO: Add hasPlayerMovedFlag boolean
   const connectedPlayer = {
     socketId: fullSocketId,
     currentRoom: fullSocketId
@@ -36,6 +45,7 @@ io.on('connection', (socket) => {
 
     // TODO: Add a property to check if they've already played a move
     // do game logic.
+    // send a "waitingOnMove" event to UI to disable buttons
 
     console.log(`${fullSocketId} in room ${currentPlayerRoom} played ${movePlayed}`);
     io.to(currentPlayerRoom).emit('movePlayed', `${user} played ${movePlayed}`);
@@ -47,6 +57,9 @@ io.on('connection', (socket) => {
   });
 
   socket.on('joinRoom', (roomNumber) => {
+
+    // TODO: Add disable moves until player is in a room event to the UI.
+    // TODO: Add current room check
 
     if(!(roomNumber in roomCounter)){
       roomCounter[roomNumber] = 0;
@@ -64,7 +77,7 @@ io.on('connection', (socket) => {
       console.log(`roomCounter: ${roomNumber}:${roomCounter[roomNumber]}`);
 
     }else{
-      // TODO: Debug why this message isnt sending to user.
+      // TODO: Debug why this message isnt sending to user. But room checking works
       socket.to(fullSocketId).emit('message', `Sorry, Room ${roomNumber} is full.`);
       console.log("room full");
     }
@@ -72,6 +85,7 @@ io.on('connection', (socket) => {
 
   // Doing room clean up before leaving room.
   socket.on('disconnecting', () => {
+    // subtract player
     let connectedPlayerRoom = connectedPlayers[fullSocketId].currentRoom;
     roomCounter[connectedPlayerRoom] -= 1;
 
