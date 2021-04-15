@@ -48,15 +48,19 @@ io.on('connection', function (socket) {
         // TODO: Add disable moves until player is in a room event to the UI.
         // TODO: Add current room check
         if (!(roomNumber in roomCounter)) {
-            roomCounter[roomNumber] = 0;
+            var newRoom = {
+                playersInRoom: [],
+                playersCount: 0
+            };
+            roomCounter[roomNumber] = newRoom;
         }
-        if (roomCounter[roomNumber] < 2) {
+        if (roomCounter[roomNumber].playersCount < 2) {
             socket.join(roomNumber);
             console.log(user + " joined room " + roomNumber + ".");
             connectedPlayers[fullSocketId].currentRoom = roomNumber;
             socket.to(roomNumber).emit('message', "Hey! I " + user + " joined room " + roomNumber + ".");
-            roomCounter[roomNumber] += 1;
-            console.log("roomCounter: " + roomNumber + ":" + roomCounter[roomNumber]);
+            roomCounter[roomNumber].playersCount += 1;
+            console.log("roomCounter: " + roomNumber + ":" + roomCounter[roomNumber].playersCount);
         }
         else {
             // TODO: Debug why this message isnt sending to user. But room checking works
@@ -68,8 +72,8 @@ io.on('connection', function (socket) {
     socket.on('disconnecting', function () {
         // subtract player
         var connectedPlayerRoom = connectedPlayers[fullSocketId].currentRoom;
-        roomCounter[connectedPlayerRoom] -= 1;
-        console.log("roomCounter: " + connectedPlayerRoom + ":" + roomCounter[connectedPlayerRoom]);
+        roomCounter[connectedPlayerRoom].playersCount -= 1;
+        console.log("roomCounter: " + connectedPlayerRoom + ":" + roomCounter[connectedPlayerRoom].playersCount);
     });
 });
 httpServer.listen(port, function () { return console.log("listening on port " + port); });

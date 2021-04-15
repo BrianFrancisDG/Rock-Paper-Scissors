@@ -1,4 +1,6 @@
 import { Player } from "./models/player";
+import { Room } from "./models/room";
+import { RoomCounter } from "./models/room-counter";
 
 const app = require('express')();
 const httpServer = require('http').createServer(app);
@@ -7,7 +9,7 @@ const io = require('socket.io')(httpServer, {
 });
 
 let connectedPlayers = {};
-let roomCounter = {};
+let roomCounter: RoomCounter = {};
 /**
  * { 1111: 
  *  { 
@@ -64,19 +66,24 @@ io.on('connection', (socket) => {
     // TODO: Add current room check
 
     if(!(roomNumber in roomCounter)){
-      roomCounter[roomNumber] = 0;
+      let newRoom: Room = {
+        playersInRoom: [],
+        playersCount: 0
+      };
+
+      roomCounter[roomNumber] = newRoom;
     }
 
-    if(roomCounter[roomNumber] < 2){
+    if(roomCounter[roomNumber].playersCount < 2){
       socket.join(roomNumber);
       console.log(`${user} joined room ${roomNumber}.`);
       connectedPlayers[fullSocketId].currentRoom = roomNumber;
 
       socket.to(roomNumber).emit('message', `Hey! I ${user} joined room ${roomNumber}.`);
 
-      roomCounter[roomNumber] += 1;
+      roomCounter[roomNumber].playersCount += 1;
 
-      console.log(`roomCounter: ${roomNumber}:${roomCounter[roomNumber]}`);
+      console.log(`roomCounter: ${roomNumber}:${roomCounter[roomNumber].playersCount}`);
 
     }else{
       // TODO: Debug why this message isnt sending to user. But room checking works
@@ -89,9 +96,9 @@ io.on('connection', (socket) => {
   socket.on('disconnecting', () => {
     // subtract player
     let connectedPlayerRoom = connectedPlayers[fullSocketId].currentRoom;
-    roomCounter[connectedPlayerRoom] -= 1;
+    roomCounter[connectedPlayerRoom].playersCount -= 1;
 
-    console.log(`roomCounter: ${connectedPlayerRoom}:${roomCounter[connectedPlayerRoom]}`);
+    console.log(`roomCounter: ${connectedPlayerRoom}:${roomCounter[connectedPlayerRoom].playersCount}`);
   });
 
 });
