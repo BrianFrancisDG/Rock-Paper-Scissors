@@ -1,4 +1,5 @@
 import { Player } from "./models/player";
+import { PlayerTracker } from "./models/player-tracker";
 import { Room } from "./models/room";
 import { RoomCounter } from "./models/room-counter";
 
@@ -8,7 +9,7 @@ const io = require('socket.io')(httpServer, {
   cors: {origin : '*'}
 });
 
-let connectedPlayers = {};
+let connectedPlayers: PlayerTracker = {};
 let roomCounter: RoomCounter = {};
 /**
  * { 1111: 
@@ -95,10 +96,14 @@ io.on('connection', (socket) => {
   // Doing room clean up before leaving room.
   socket.on('disconnecting', () => {
     // subtract player
+    
     let connectedPlayerRoom = connectedPlayers[fullSocketId].currentRoom;
-    roomCounter[connectedPlayerRoom].playersCount -= 1;
+    console.log(connectedPlayer);
+    if(connectedPlayerRoom in roomCounter){
+      roomCounter[connectedPlayerRoom].playersCount -= 1;
+      console.log(`roomCounter: ${connectedPlayerRoom}:${roomCounter[connectedPlayerRoom].playersCount}`);
+    }
 
-    console.log(`roomCounter: ${connectedPlayerRoom}:${roomCounter[connectedPlayerRoom].playersCount}`);
   });
 
 });

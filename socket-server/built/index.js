@@ -72,8 +72,11 @@ io.on('connection', function (socket) {
     socket.on('disconnecting', function () {
         // subtract player
         var connectedPlayerRoom = connectedPlayers[fullSocketId].currentRoom;
-        roomCounter[connectedPlayerRoom].playersCount -= 1;
-        console.log("roomCounter: " + connectedPlayerRoom + ":" + roomCounter[connectedPlayerRoom].playersCount);
+        console.log(connectedPlayer);
+        if (connectedPlayerRoom in roomCounter) {
+            roomCounter[connectedPlayerRoom].playersCount -= 1;
+            console.log("roomCounter: " + connectedPlayerRoom + ":" + roomCounter[connectedPlayerRoom].playersCount);
+        }
     });
 });
 httpServer.listen(port, function () { return console.log("listening on port " + port); });
