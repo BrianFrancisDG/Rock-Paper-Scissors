@@ -23,7 +23,8 @@ io.on('connection', function (socket) {
     //TODO: Add hasPlayerMovedFlag boolean
     var connectedPlayer = {
         socketId: fullSocketId,
-        currentRoom: fullSocketId
+        currentRoom: fullSocketId,
+        movePlayed: 'none'
     };
     connectedPlayers[fullSocketId] = connectedPlayer;
     console.log(connectedPlayers);
@@ -37,6 +38,7 @@ io.on('connection', function (socket) {
         // TODO: Add a property to check if they've already played a move
         // do game logic.
         // send a "waitingOnMove" event to UI to disable buttons
+        //if(roomCounter[currentPlayerRoom].playersInRoom[0])
         console.log(fullSocketId + " in room " + currentPlayerRoom + " played " + movePlayed);
         io.to(currentPlayerRoom).emit('movePlayed', user + " played " + movePlayed);
     });
@@ -46,6 +48,8 @@ io.on('connection', function (socket) {
     });
     socket.on('joinRoom', function (roomNumber) {
         // TODO: Add disable moves until player is in a room event to the UI.
+        io.emit('Joined Room', { fullSocketId: fullSocketId, roomNumber: roomNumber });
+        // handle in FE
         // TODO: Add current room check
         if (!(roomNumber in roomCounter)) {
             var newRoom = {
@@ -60,7 +64,9 @@ io.on('connection', function (socket) {
             connectedPlayers[fullSocketId].currentRoom = roomNumber;
             socket.to(roomNumber).emit('message', "Hey! I " + user + " joined room " + roomNumber + ".");
             roomCounter[roomNumber].playersCount += 1;
-            console.log("roomCounter: " + roomNumber + ":" + roomCounter[roomNumber].playersCount);
+            // adding to players in room
+            roomCounter[roomNumber].playersInRoom.push(fullSocketId);
+            console.log("playersInRoom: " + roomNumber + ":" + roomCounter[roomNumber].playersInRoom);
         }
         else {
             // TODO: Debug why this message isnt sending to user. But room checking works
@@ -75,7 +81,9 @@ io.on('connection', function (socket) {
         console.log(connectedPlayer);
         if (connectedPlayerRoom in roomCounter) {
             roomCounter[connectedPlayerRoom].playersCount -= 1;
-            console.log("roomCounter: " + connectedPlayerRoom + ":" + roomCounter[connectedPlayerRoom].playersCount);
+            // removing player in room
+            roomCounter[connectedPlayerRoom].playersInRoom = roomCounter[connectedPlayerRoom].playersInRoom.filter(function (id) { return id !== fullSocketId; });
+            console.log("playersInRoom: " + connectedPlayerRoom + ":" + roomCounter[connectedPlayerRoom].playersInRoom);
         }
     });
 });
